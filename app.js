@@ -1,14 +1,21 @@
 const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
-const Listing = require("./models/listing.js");
 const path = require("path");
 const methodOverride = require("method-override");
 const ejsMate = require("ejs-mate");
-const wrapAsync = require("./utils/wrapAsync.js");
 const ExpressError = require("./utils/ExpressError.js");
-const { error } = require("console");
-const { listingSchema } = require("./schema.js");
+const session = require("express-session");
+const flash = require("connect-flash");
+const passport = require("passport");
+const LocalStrategy = require("passport-local");
+const User = require("./models/user.js");
+
+
+
+const listingRouter = require("./routes/listing.js");
+const reviewRouter = require("./routes/review.js");
+const userRouter = require("./routes/user.js");
 
 
 
@@ -34,86 +41,84 @@ app.use(methodOverride("_method"));
 app.engine('ejs', ejsMate);
 app.use(express.static(path.join(__dirname, "/public")));
 
+const sessionOptions = {
+    secret: "mysupersecretcode",
+    resave: false,
+    saveUninitialized: true,
+    cookie: {
+        expires: Date.now() + 7 * 24 * 60 * 1000,
+        maxAge: 7 * 24 * 60 * 60 * 1000, 
+        httpOnly: true,
+    },
+};
+
 app.get("/", (req, res) => {
     res.send("Hi, I am root");
 });
 
-const validateListing = (req, res, next) => {
-    let {error} = listingSchema.validate(req.body);
-    
-    if(error) {
-        let errMsg = error.details.map((el) => el.message).join(",");
-        throw new ExpressError(400, errMsg);
-    } else {
-        next();
+app.use(session(sessionOptions));
+app.use(flash());
+
+app.use(passport.initialize());
+app.use(passport.session());
+
+    passport.use(new LocalStrategy(async (username, password, done) => {
+    try {
+        // A. Find the user by username
+        const user = await User.findOne({ username: username });
+        if (!user) {
+        return done(null, false, { message: "User not found" });
+        }
+
+        // B. Use the plugin's instance method to check the password
+        // This returns a generic object { user: ... } if successful
+        const result = await user.authenticate(password);
+        
+        if (result.user) {
+        return done(null, result.user);
+        } else {
+        return done(null, false, { message: "Incorrect password" });
+        }
+    } catch (err) {
+        return done(err);
     }
-};
+    }));
 
-// index route
-app.get("/listings", wrapAsync(async (req, res) => {
-    const allListings = await Listing.find({});
-    res.render("listings/index.ejs", {allListings});
-}));
+    // 2. Manual Serialization (How to store user in session)
+    passport.serializeUser((user, done) => {
+    done(null, user.id);
+    });
 
-// NEW ROUTE
-app.get("/listings/new", wrapAsync(async (req, res) => {
-    res.render("listings/new.ejs");
-}));
+    // 3. Manual Deserialization (How to retrieve user from session)
+    passport.deserializeUser(async (id, done) => {
+    try {
+        const user = await User.findById(id);
+        done(null, user);
+    } catch (err) {
+        done(err);
+    }
+});
+app.use((req, res, next) => {
+    res.locals.success = req.flash("success");
+    res.locals.error = req.flash("error");
+    next();
+});
 
-//  SHOW ROUTE
-app.get("/listings/:id", wrapAsync(async (req, res) => {
-    let { id } = req.params;
-    const listing = await Listing.findById(id);
-    res.render("listings/show.ejs", { listing });
-}));
 
-// CREATE ROUTE
-app.post("/listings",
-    validateListing,
-    wrapAsync (async (req, res) => {
-        const newListing = new Listing(req.body.listing);
-        await newListing.save();
-        res.redirect("/listings");
-    
-}));
-
-// EDIT ROUTE
-app.get("/listings/:id/edit", wrapAsync(async (req, res) => {
-    let { id } = req.params;
-    const listing = await Listing.findById(id);
-    res.render("listings/edit.ejs", { listing });
-}));
-
-// UPDATE ROUTE
-app.put("/listings/:id", 
-    validateListing,
-    wrapAsync(async (req, res) => {
-    
-    let { id } = req.params;
-    await Listing.findByIdAndUpdate(id, {...req.body.listing});
-    res.redirect(`/listings/${id}`);
-}));
-
-// DELETE ROUTE
-app.delete("/listings/:id", wrapAsync(async (req, res) => {
-    let { id } = req.params;
-    let deletedListing = await Listing.findByIdAndDelete(id);
-    console.log(deletedListing);
-    res.redirect("/listings");
-}));
-
-// app.get("/testListing", async (req, res) => {
-//     let sampleListing = new Listing({
-//         title: "My New Villaa",
-//         description: "By the beach",
-//         price: 1200,
-//         location: "Calangute, Goa",
-//         country: "India",
-//     });
-//     await sampleListing.save();
-//     console.log("sample was saved");
-//     res.send("Successful testing");
+// app.get("/demouser", async (req, res) => {
+//     let fakeUser = new User({
+//     email: "student@gmail.com",
+//     username: "delta-student"
 // });
+//     let registeredUser = await User.register(fakeUser, "helloworld");
+//     res.send(registeredUser);
+// });
+
+
+app.use("/listings", listingRouter);
+app.use("/listings/:id/reviews", reviewRouter);
+app.use("/", userRouter);
+
 
 app.use( (req, res, next) => {
     next(new ExpressError(404, "Page Not Found:"));
