@@ -8,13 +8,10 @@ const listingSchema = new Schema({
     required: true,
   },
   description: String,
+
   image: {
+    url: String,
     filename: String,
-    url: {
-      type: String,
-      default: "https://images.unsplash.com/photo-1570129477492-45c003edd2be?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=1170",
-      set: (v) => v === "" ? "https://images.unsplash.com/photo-1570129477492-45c003edd2be?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=1170" : v,
-    },
   },
   price: Number,
   location: String,
@@ -29,12 +26,30 @@ const listingSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: "User",
   },
+
+  category: {
+    type: String,
+    enum: ["Trending", "Rooms", "Iconic Cities", "Mountains", "Castles", "Amazing Pools", "Camping", "Farms", "Arctic", "Beach"],
+    required: true,
+  },
+
+  geometry: {
+    type: {
+      type: String,
+      enum: ["Point"],
+      required: true,
+    },
+    coordinates: {
+      type: [Number],
+      required: true,
+    },
+  },
+  
 });
 
 listingSchema.post("findOneAndDelete", async (listing) => {
-  if(listing) {
-    await Review.deleteMany({_id : {$in: listing.reviews}});
-
+  if (listing) {
+    await Review.deleteMany({ _id: { $in: listing.reviews } });
   }
 });
 

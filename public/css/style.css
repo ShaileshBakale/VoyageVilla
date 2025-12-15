@@ -1,128 +1,413 @@
 /* Body */
-body  {
-    font-family: "Plus Jakarta Sans", sans-serif !important;
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-    
+body {
+  font-family: "Plus Jakarta Sans", sans-serif !important;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
 }
 
 .container {
-    flex: 1;
+  flex: 1;
 }
 
 /* navbar */
 .navbar {
-    height: 5rem;
-    background-color: white;
+  height: 5rem;
+  background-color: white;
 }
 
 .fa-compass {
-    color: #fe424d;
-    font-size: 2rem;
+  color: #fe424d;
+  font-size: 2rem;
 }
 
 .nav-link {
-    color: #070707 !important;
+  color: #222222 !important;
+}
 
+/* index page - FILTERS*/
+#filters {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 0.5rem 0;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+}
+
+#filters::-webkit-scrollbar {
+  display: none;
+}
+
+#filters a.filter {
+  text-decoration: none;
+  color: inherit;
+}
+
+.filter {
+  text-align: center;
+  margin-top: 0.5rem;
+  margin-right: 2rem;
+  opacity: 0.7;
+  transition: opacity 0.2s ease-in-out;
+}
+
+.filter:hover {
+  opacity: 1;
+  cursor: pointer;
+}
+
+.filter p {
+  font-size: 0.8rem;
+}
+
+/* #filterCollapse {
+  max-height: 0;
+  overflow: auto;
+  transition: max-height 0.3s ease;
+} */
+
+/* Desktop-only: hide mobile pill when wide */
+@media (min-width: 769px) {
+  .mobile-tax-toggle {
+    display: none;
+  }
+}
+
+/* TAX TOGGLE */
+.tax-info {
+  display: none;
+}
+
+.tax-toggle {
+  border: 1px solid black;
+  border-radius: 1.2rem;
+  height: 3.25rem;
+  padding: 1rem;
+  margin-left: 3rem;
+  display: flex;
+  align-items: center;
+}
+
+/* SEARCH BAR */
+.search-btn {
+  background-color: #fe424d !important;
+  color: white !important;
+  border-radius: 25px !important;
+  padding: 0 1rem 0 1rem !important;
+}
+
+.search-btn i {
+  display: inline;
+  margin-right: 0.5rem;
+}
+
+.search-inp {
+  border-radius: 25px !important;
+  font-size: 0.8rem !important;
+  padding: 0.5rem 3rem 0.5rem 3rem !important;
 }
 
 /* Footer */
 .f-info-links a {
-    text-decoration: none;
-    color: #222222;
+  text-decoration: none;
+  color: #222222;
 }
 
 .f-info-links a:hover {
-    text-decoration: underline;  
+  text-decoration: underline;
 }
 
-.f-info-links, 
+.f-info-links,
 .f-info-social,
 .f-info-brand {
-    width: 100%;
-    display: flex;
-    vertical-align: middle;
-    align-items: center;
-    justify-content: center;
+  width: 100%;
+  display: flex;
+  vertical-align: middle;
+  align-items: center;
+  justify-content: center;
 }
 
-.f-info-links{
-    gap: 0.5rem;
+.f-info-links {
+  gap: 0.5rem;
 }
 
 .f-info-social i {
-    margin-right: 1rem;
-    font-size: 1.7rem;
+  margin-right: 1rem;
+  font-size: 1.7rem;
 }
 
 .f-info {
-    text-align: center;
-    height: 8rem;
-    background-color: #ebebeb;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    align-items: space-evenly;
+  text-align: center;
+  height: 8rem;
+  background-color: #ebebeb;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: space-evenly;
 }
 
 /* Cards */
 .listing-card {
-    border: none !important;
-    margin-bottom: 2rem;
+  border: none !important;
+  margin-bottom: 2rem;
 }
 
 .card-img-top {
-     border-radius: 0.5rem !important;
-     width: 100% !important;
-     object-fit: cover !important;
+  border-radius: 0.5rem !important;
+  width: 100% !important;
+  object-fit: cover !important;
 }
 
 .card-body {
-    padding: 0rem !important;
+  padding: 0rem !important;
 }
 
 .card-text p {
-    font-weight: 400 !important;
+  font-weight: 400 !important;
 }
 
 .listing-link {
-    text-decoration: none;
-    /* color: #070707; */
+  text-decoration: none;
+  /* color: #070707; */
 }
 
 /* CARD EFFECTS */
 .card-img-overlay {
-    opacity: 0;
+  opacity: 0;
 }
 .card-img-overlay:hover {
-    opacity: 0.2;
-    background-color: white;
+  opacity: 0.2;
+  background-color: white;
 }
 
 /* NEW PAGE */
 .add-btn {
-    background-color: #fe424d !important;
-    border: none !important;
+  background-color: #fe424d !important;
+  border: none !important;
 }
 
 /* edit page */
 .edit-btn {
-    background-color: #fe424d !important;
-    border: none !important;
+  background-color: #fe424d !important;
+  border: none !important;
 }
 
 /* SHOW page */
 .show-img {
-    height: 30vh
+  height: 30vh;
 }
 
 .btns {
-    display: flex;
-
+  display: flex;
 }
 
 .show-card {
-    padding-left:0;
-    padding-right:0;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+/* map */
+#map {
+  height: 300px;
+  width: 80vh;
+}
+
+/* ---------------------------------
+   MOBILE LAYOUT ONLY (<768px)
+----------------------------------*/
+@media (max-width: 768px) {
+  /* Make the tax-toggle appear beside the filter button */
+  .mobile-filters-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.6rem;
+    width: 100%;
+    padding: 0 0.4rem;
+  }
+
+  #filtersToggleBtn {
+    flex-shrink: 0;
+    font-size: 0.8rem;
+    padding: 2px 8px;
+    background-color: #fe424d;
+    color: white;
+    border: none;
+  }
+
+  .desktop-tax-toggle {
+    display: none !important;
+  }
+
+  /* mobile taxes pill */
+  #mobileTaxToggle {
+    display: inline-flex;
+    align-items: center;
+    flex-wrap: nowrap;
+    flex-shrink: 0;
+    padding: 2px 10px;
+    border-radius: 999px;
+    border: 1px solid #000;
+    background: #fff;
+    font-size: 0.8rem;
+  }
+
+  #mobileTaxToggle .form-check-reverse {
+    display: flex;
+    flex-direction: row-reverse; /* label left, switch right */
+    align-items: center;
+    gap: 6px; /* nice gap between label and toggle */
+    margin: 0;
+    padding: 0;
+  }
+
+  #mobileTaxToggle .form-check-input {
+    margin: 0;
+  }
+
+  #mobileTaxToggle .form-check-label {
+    margin: 0;
+    font-size: 0.8rem;
+  }
+
+  #mobileSearchInput {
+    width: 60vw; /* take only part of the screen */
+    max-width: 200px; /* hard cap */
+    font-size: 0.9rem;
+  }
+
+  #mobileSearchWrapper {
+    flex: 0 1 auto;
+  }
+
+  #mobileSearchForm {
+    max-width: 70vw; /* the whole form (icon + input) */
+  }
+
+  #mobileSearchInput {
+    width: 55vw; /* leave space for brand + hamburger */
+    max-width: 220px; /* hard cap */
+    font-size: 0.9rem;
+  }
+
+  #mobileSearchToggle {
+    border-radius: 50% !important;
+    background-color: #fe424d !important;
+    color: white !important;
+    border: none !important;
+  }
+
+  #filters {
+    display: flex;
+    overflow-x: auto;
+    white-space: nowrap;
+    gap: 1.5rem;
+    padding: 1rem 0;
+  }
+
+  /* Hide tax-toggle inside #filters on mobile */
+  #filters .tax-toggle {
+    display: none;
+  }
+
+  /* Show tax-toggle next to the filter button */
+  .mobile-tax-toggle {
+    /* display: block !important; */
+    display: flex;
+    height: 2.5rem;
+    align-items: center;
+  }
+
+  /* Filters become horizontal scroll bar */
+
+  #filters::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Show filter button */
+  .filter-toggle-btn {
+    display: block;
+    background-color: #fe424d;
+    color: #fff;
+    border-radius: 1rem;
+    border: #fe424d;
+    padding-left: 0.8rem;
+    padding-right: 0.8rem;
+    height: 2rem;
+  }
+  .filter-toggle-btn i {
+    margin-right: 7px;
+    margin-left: 5px;
+  }
+
+  .search {
+    display: none !important;
+  }
+
+  .navbar-collapse {
+    background: white;
+    padding: 1rem;
+    border-radius: 0 0 8px 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  }
+
+  .navbar-nav {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .navbar-nav .nav-link {
+    padding: 0.5rem 1rem;
+  }
+
+  .nav-mobile-search-form.open {
+    display: inline-block;
+  }
+
+  .show-img {
+    height: 30vh;
+  }
+
+  #map {
+    width: 100%;
+  }
+
+  .card-body {
+    padding: .5rem !important;
+  }
+
+  .edit-btn {
+    width: 100%;
+  }
+}
+
+/* ---------------------
+   MOBILE NAV SEARCH FIX
+---------------------- */
+
+.nav-search-btn {
+  background: #fe424d;
+  color: #fff;
+  border: none;
+  padding: 0.4rem 0.7rem;
+  border-radius: 50%;
+  font-size: 1.1rem;
+  margin-left: 0.5rem;
+}
+
+.nav-mobile-search-form {
+  display: none; /* hidden until icon click */
+}
+
+.nav-mobile-search-form input {
+  height: 2.2rem;
+  border: 1px solid #ccc;
+  border-radius: 0.5rem;
+  padding: 0 0.7rem;
+  font-size: 0.9rem;
+  width: 180px;
+  margin-left: 0.5rem;
 }

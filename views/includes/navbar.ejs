@@ -1,30 +1,88 @@
-    <nav class="navbar navbar-expand-md bg-body-light border-bottom sticky-top">
+<nav class="navbar navbar-expand-md bg-body-light border-bottom sticky-top">
     <div class="container-fluid">
-        <a class="navbar-brand" href="/"><i class="fa-regular fa-compass"></i></i></a>
-        <button 
-            class="navbar-toggler" 
-            type="button" 
-            data-bs-toggle="collapse" 
-            data-bs-target="#navbarNavAltMarkup" 
-        
-        >
-        <span class="navbar-toggler-icon"></span>
+
+        <!-- left: brand -->
+        <a class="navbar-brand" href="/listings"><i class="fa-regular fa-compass"></i></i></a>
+
+        <!-- Centre: Mobile search (only on < md ) -->
+        <div class="d-flex d-md-none justify-content-center" id="mobileSearchWrapper">
+            <form class="d-flex align-items-center flex-nowrap" role="search" action="/listings" method="GET"
+                id="mobileSearchForm">
+                <button class="btn btn-outline-secondary px-2" type="button" id="mobileSearchToggle">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </button>
+                <input class="form-control ms-2 d-none" type="search" name="search" id="mobileSearchInput"
+                    placeholder="Search" value="<%= typeof search !== 'undefined' ? search : '' %>">
+            </form>
+        </div>
+
+        <!-- right: hamburger (only on < md) -->
+        <button class="navbar-toggler d-md-none" type="button" data-bs-toggle="collapse"
+            data-bs-target="#navbarNavAltMarkup">
+            <span class="navbar-toggler-icon"></span>
         </button>
+
+        <!-- Desktop navbar + menu -->
         <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-        <div class="navbar-nav">
-            <a class="nav-link" href="/">Home</a>
-            <a class="nav-link" href="/listings">All Listings</a>
-            <a class="nav-link" href="/listings/new">Add New Listings</a>
-        </div>
-        <div class="navbar-nav ms-auto">
-            <% if(!currUser) { %>
-            <a class="nav-link" href="/signup">Sign up</a>
-            <a class="nav-link" href="/login">Log in</a>
-            <% } %>
-            <% if(currUser) { %>
-            <a class="nav-link" href="/logout">Log out</a>
-            <% } %>
-        </div>
+            <div class="navbar-nav">
+                <a class="nav-link" href="/listings">Explore</a>
+            </div>
+
+            <!-- Desktop search (hidden on mobile) -->
+            <div class="navbar-nav ms-auto d-none d-md-flex search">
+                <form class="d-flex" role="search" action="/listings" method="GET">
+                    <input class="form-control me-2 search-inp " type="search" name="search"
+                        value="<%= typeof search !== 'undefined' ? search : '' %>" placeholder="Search destinations" />
+                    <button class="btn search-btn">
+                        <i class="fa-solid fa-magnifying-glass"></i>Search
+                    </button>
+                </form>
+            </div>
+
+
+            <!-- Right Menu -->
+            <div class="navbar-nav ms-auto me-4">
+                <a class="nav-link" href="/listings/new">Add New Listings</a>
+                <% if(!currUser) { %>
+                    <a class="nav-link" href="/signup"><b>Sign Up</b></a>
+                    <a class="nav-link" href="/login"><b>Log In</b></a>
+                    <% } %>
+                        <% if(currUser) { %>
+                            <a class="nav-link" href="/logout"><b>Log Out</b></a>
+                            <% } %>
+            </div>
         </div>
     </div>
-    </nav>
+    </div>
+</nav>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const toggleBtn = document.getElementById("mobileSearchToggle");
+        const input = document.getElementById("mobileSearchInput");
+        const form = document.getElementById("mobileSearchForm");
+
+        if (!toggleBtn || !input || !form) return;
+
+        toggleBtn.addEventListener("click", function (e) {
+            e.preventDefault();
+
+            // First click: show input and focus
+            if (input.classList.contains("d-none")) {
+                input.classList.remove("d-none");
+                input.focus();
+                return;
+            }
+
+            // If input is visible:
+            const value = input.value.trim();
+            if (value === "") {
+                input.focus();
+                return;
+            }
+
+            // Input visible and has value -> submit form
+            form.submit();
+        });
+    });
+</script>
